@@ -14,6 +14,7 @@ struct DiskNew: Identifiable {
 
 struct HomeNewView: View {
     @State var isSelectedDisk: Int? = nil
+    @State private var isAnimating: Bool = false
     @Namespace var diskAnimation
     private let disks = (1..<7).map { DiskNew(id: $0, imageName: "diskExample-\($0)") }
     var body: some View {
@@ -28,11 +29,16 @@ struct HomeNewView: View {
                 ForEach(disks) { disk in
                     DiskView(imageName: disk.imageName)
                         .matchedGeometryEffect(id: disk.id, in: diskAnimation)
-                        .opacity(isSelectedDisk == disk.id ? 0 : 1)
                         .onTapGesture {
-                            withAnimation(.spring(response:0.5, dampingFraction: 0.5)){
-                                print("change disk '\(disk.id)'")
-                                isSelectedDisk = disk.id
+                            withAnimation(.spring(response:0.5, dampingFraction: 0.9)){
+                                // Si el disco ya está seleccionado, deseleccionar
+                                if isSelectedDisk == disk.id {
+                                    isSelectedDisk = nil
+                                } else {
+                                    // Seleccionar el nuevo disco
+                                    isSelectedDisk = disk.id
+                                }
+                                
                             }
                         }
                 }
