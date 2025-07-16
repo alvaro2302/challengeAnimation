@@ -12,7 +12,8 @@ var colorDiskCenter: Color = Color(red: 170/255, green: 177/255, blue: 170/255, 
 struct PlayedDiskView: View {
     @Binding var isSelecteDisk: Int?
     var diskAnimation: Namespace.ID
-    
+    @Binding var userName: String
+    var isUserNameEdit: Bool = false
     var body: some View {
         VStack{
             ZStack{
@@ -25,12 +26,15 @@ struct PlayedDiskView: View {
                                           .matchedGeometryEffect(id: diskId, in: diskAnimation)
                                   }
                               }
-          
-               
+             
             }
+            if (isUserNameEdit) {
+                TextField("Enter username", text: $userName).padding(.horizontal,60)
+            }
+           
           
             
-        }.frame(width: 250, height: 250).background(colorSpaceGray).cornerRadius(50).shadow(radius: 10).opacity(0.9)
+        }.frame(width: 250, height: isUserNameEdit ? 350 : 250).background(colorSpaceGray).cornerRadius(50).shadow(radius: 10).opacity(0.9)
     }
     private func diskImageName(for id: Int) -> String {
         print("chnage disk \(id)")
@@ -40,6 +44,7 @@ struct PlayedDiskView: View {
 //232 230 233
 #Preview {
     @State var isSelecteDisk: Int? = 4
+    @State var userName: String = ""
     @Namespace var diskAnimation
-    PlayedDiskView(isSelecteDisk: $isSelecteDisk, diskAnimation: diskAnimation)
+    PlayedDiskView(isSelecteDisk: $isSelecteDisk, diskAnimation: diskAnimation, userName: $userName, isUserNameEdit: true)
 }
